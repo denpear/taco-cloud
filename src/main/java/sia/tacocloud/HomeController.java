@@ -9,6 +9,5 @@ public class HomeController {
     @GetMapping("/")
     public String home(){
         return "home";
-    }
-
+    } ////имя представления, которое будет отправлено пользователю.
 }
