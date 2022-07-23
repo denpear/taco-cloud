@@ -1,17 +1,11 @@
-package sia.tacocloud;
+package sia.tacocloud.web;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootApplication
-public class TacoCloudApplication implements WebMvcConfigurer {
-
-    public static void main(String[] args) {
-        SpringApplication.run(TacoCloudApplication.class, args);
-    }
-
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
     /**
      * Настройте простые автоматические контроллеры,
      * предварительно сконфигурированные с кодом статуса ответа и/или представлением для отображения тела ответа.
@@ -21,7 +15,6 @@ public class TacoCloudApplication implements WebMvcConfigurer {
      * @param registry
      * @see ViewControllerRegistry
      */
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("home");
