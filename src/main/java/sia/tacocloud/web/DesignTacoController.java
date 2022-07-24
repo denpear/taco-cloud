@@ -14,6 +14,7 @@ import sia.tacocloud.TacoOrder;
 import sia.tacocloud.data.IngredientRepository;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,12 +55,14 @@ public class DesignTacoController {
      */
 
     @ModelAttribute
-    public void addIngredientsToModel(Model model){
-        Iterable<Ingredient> ingredients = ingredientRepository.findAll();
+    public void addIngredientsToModel(Model model) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepository.findAll().forEach(i -> ingredients.add(i));
 
         Type[] types = Ingredient.Type.values();
-        for (Type type : types){
-            model.addAttribute(type.toString().toLowerCase(),filterByType(ingredients,type));
+        for (Type type : types) {
+            model.addAttribute(type.toString().toLowerCase(),
+                    filterByType(ingredients, type));
         }
     }
 
