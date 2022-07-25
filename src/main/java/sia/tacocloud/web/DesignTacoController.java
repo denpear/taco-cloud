@@ -11,11 +11,11 @@ import sia.tacocloud.Ingredient;
 import sia.tacocloud.Ingredient.Type;
 import sia.tacocloud.Taco;
 import sia.tacocloud.TacoOrder;
+import sia.tacocloud.TacoUDT;
 import sia.tacocloud.data.IngredientRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -108,8 +108,8 @@ public class DesignTacoController {
     @PostMapping
     public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder){
         if (errors.hasErrors()) return "design";
-        tacoOrder.addTaco(taco);
-        log.info("Processing taco: {} ",taco);
+        tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
+        log.info("Processing taco: {} ", taco);
         return "redirect:/orders/current"; //имя представления, которое будет отправлено пользователю.
     }
 }

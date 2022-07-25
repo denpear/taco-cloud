@@ -4,9 +4,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Id;
-import javax.persistence.Entity;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
 /**
  * Для начала сосредоточимся на ингредиентах тако. В нашей предметной области ингредиенты для тако – довольно простые объекты.
@@ -15,7 +14,6 @@ import javax.persistence.Entity;
  */
 
 @Data
-@Entity
 @AllArgsConstructor
 /**
  * Однако мы не собираемся давать возможность использовать его извне,
@@ -25,9 +23,10 @@ import javax.persistence.Entity;
  * в результате чего конструктор, сгенерированный библиотекой Lombok, присвоит им значение по умолчанию null, 0 или false,
  * в зависимости от типа свойства.
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@Table("ingredients")
 public class Ingredient {
-    @Id
+    @PrimaryKey
     private final String id;
     private final String name;
     private final Type type;
