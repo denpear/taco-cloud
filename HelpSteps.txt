@@ -1,0 +1,45 @@
+docker run -p 27017:27017 -d mongo:latest
+
+как писать запросы: https://www.prisma.io/dataguide/mongodb/querying-documents
+
+MongoDB хранит документы в формате BSON (Binary JSON),
+которые можно запрашивать и извлекать подобно обычным данным в любой другой базе данных.
+
+CLI linux:
+
+# mongo
+
+Можно использовать Tab
+>db.+[Tab] выводит все коллекции
+
+dbs
+use test
+
+db.runCommand("connectionStatus")
+
+У нас только два аннотированных @Document классов
+> show collections
+ingredient
+tacoOrder
+
+> db.ingredient.find()
+{ "_id" : "FLTO", "name" : "Flour Tortilla", "type" : "WRAP", "_class" : "tacos.Ingredient" }
+{ "_id" : "COTO", "name" : "Corn Tortilla", "type" : "WRAP", "_class" : "tacos.Ingredient" }
+{ "_id" : "GRBF", "name" : "Ground Beef", "type" : "PROTEIN", "_class" : "tacos.Ingredient" }
+{ "_id" : "CARN", "name" : "Carnitas", "type" : "PROTEIN", "_class" : "tacos.Ingredient" }
+{ "_id" : "TMTO", "name" : "Diced Tomatoes", "type" : "VEGGIES", "_class" : "tacos.Ingredient" }
+{ "_id" : "LETC", "name" : "Lettuce", "type" : "VEGGIES", "_class" : "tacos.Ingredient" }
+{ "_id" : "CHED", "name" : "Cheddar", "type" : "CHEESE", "_class" : "tacos.Ingredient" }
+{ "_id" : "JACK", "name" : "Monterrey Jack", "type" : "CHEESE", "_class" : "tacos.Ingredient" }
+{ "_id" : "SLSA", "name" : "Salsa", "type" : "SAUCE", "_class" : "tacos.Ingredient" }
+{ "_id" : "SRCR", "name" : "Sour Cream", "type" : "SAUCE", "_class" : "tacos.Ingredient" }
+
+// find() принимает ключ-значение
+> db.ingredient.find({"_id" : "SRCR"}).pretty()
+
+> db.tacoOrder.find()
+// красивый правильный вывод в JSON
+> db.tacoOrder.find().pretty()
+
+
+
