@@ -1,8 +1,7 @@
-package sia.tacocloud.data;
+package tacos.data;
 
 import org.springframework.data.repository.CrudRepository;
-import sia.tacocloud.Ingredient;
-import java.util.Optional;
+import tacos.Ingredient;
 
 /**
  * интерфейс Repository параметризован. Первый па-
@@ -11,7 +10,5 @@ import java.util.Optional;
  * тификатора хранимого объекта
  */
 public interface IngredientRepository extends CrudRepository<Ingredient,String> {
-    Iterable<Ingredient> findAll();
-    Optional<Ingredient> findById(String id);
-    Ingredient save (Ingredient ingredient);
+
 }

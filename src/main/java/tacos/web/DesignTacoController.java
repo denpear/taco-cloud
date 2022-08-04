@@ -1,4 +1,4 @@
-package sia.tacocloud.web;
+package tacos.web;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -7,15 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import sia.tacocloud.Ingredient;
-import sia.tacocloud.Ingredient.Type;
-import sia.tacocloud.Taco;
-import sia.tacocloud.TacoOrder;
-import sia.tacocloud.data.IngredientRepository;
+import tacos.Ingredient;
+import tacos.Taco;
+import tacos.TacoOrder;
+import tacos.data.IngredientRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -59,8 +57,8 @@ public class DesignTacoController {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredientRepository.findAll().forEach(i -> ingredients.add(i));
 
-        Type[] types = Ingredient.Type.values();
-        for (Type type : types) {
+        Ingredient.Type[] types = Ingredient.Type.values();
+        for (Ingredient.Type type : types) {
             model.addAttribute(type.toString().toLowerCase(),
                     filterByType(ingredients, type));
         }
@@ -92,7 +90,7 @@ public class DesignTacoController {
         return "design";
     } //имя представления, которое будет отправлено пользователю.
 
-    private Iterable<Ingredient> filterByType(Iterable<Ingredient> ingredients, Type type){
+    private Iterable<Ingredient> filterByType(Iterable<Ingredient> ingredients, Ingredient.Type type){
         return StreamSupport.stream(ingredients.spliterator(),false).filter(x->x.getType().equals(type)).collect(Collectors.toList());
     }
 

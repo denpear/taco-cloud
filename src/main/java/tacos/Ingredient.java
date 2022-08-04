@@ -1,4 +1,4 @@
-package sia.tacocloud;
+package tacos;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

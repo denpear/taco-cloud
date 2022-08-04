@@ -1,4 +1,4 @@
-package sia.tacocloud;
+package tacos;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Taco {
     @NotNull
     @Size (min=1,message = "You must choose at least 1 ingredient")
     @ManyToMany
-    private List<Ingredient> ingredients;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public void addIngredient(Ingredient ingredient) {
         this.ingredients.add(ingredient);
