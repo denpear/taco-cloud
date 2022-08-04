@@ -1,4 +1,4 @@
-package sia.tacocloud;
+package tacos;
 
 import java.util.List;
 import java.util.stream.Collectors;

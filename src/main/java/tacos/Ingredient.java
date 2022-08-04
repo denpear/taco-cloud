@@ -1,9 +1,7 @@
-package sia.tacocloud;
+package tacos;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -23,7 +21,6 @@ import org.springframework.data.cassandra.core.mapping.Table;
  * в результате чего конструктор, сгенерированный библиотекой Lombok, присвоит им значение по умолчанию null, 0 или false,
  * в зависимости от типа свойства.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @Table("ingredients")
 public class Ingredient {
     @PrimaryKey

@@ -1,4 +1,4 @@
-package sia.tacocloud;
+package tacos;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import lombok.Data;
@@ -11,6 +11,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +43,7 @@ public class Taco {
     @NotNull
     @Size (min=1,message = "You must choose at least 1 ingredient")
     @Column("ingredients")
-    private List<IngredientUDT> ingredients;
+    private List<IngredientUDT> ingredients = new ArrayList<>();
 
     public void addIngredient(Ingredient ingredient) {
         this.ingredients.add(TacoUDRUtils.toIngredientUDT(ingredient));

@@ -1,4 +1,4 @@
-package sia.tacocloud;
+package tacos;
 
 import lombok.Data;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;

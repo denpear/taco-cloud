@@ -1,8 +1,7 @@
-package sia.tacocloud.data;
+package tacos.data;
 
 import org.springframework.data.repository.CrudRepository;
-import sia.tacocloud.Ingredient;
-import java.util.Optional;
+import tacos.Ingredient;
 
 /**
  * интерфейс Repository параметризован. Первый па-

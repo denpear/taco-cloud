@@ -1,7 +1,7 @@
-package sia.tacocloud.data;
+package tacos.data;
 
 import org.springframework.data.repository.CrudRepository;
-import sia.tacocloud.TacoOrder;
+import tacos.TacoOrder;
 
 import java.util.UUID;
 
