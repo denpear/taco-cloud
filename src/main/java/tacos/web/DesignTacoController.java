@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import tacos.Ingredient;
 import tacos.Taco;
 import tacos.TacoOrder;
+import tacos.User;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
+import tacos.data.UserRepository;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,14 +33,18 @@ import java.util.stream.StreamSupport;
 @Slf4j
 @Controller
 @RequestMapping("/design")
-@SessionAttributes("tacoOrder")
+@SessionAttributes("order")
 public class DesignTacoController {
 
-    private final IngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepo;
+    private TacoRepository tacoRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository) {
-                this.ingredientRepository = ingredientRepository;
+    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo, UserRepository userRepo) {
+        this.ingredientRepo = ingredientRepo;
+        this.tacoRepo = tacoRepo;
+        this.userRepo = userRepo;
     }
 
     /**
@@ -55,7 +63,7 @@ public class DesignTacoController {
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepository.findAll().forEach(i -> ingredients.add(i));
+        ingredientRepo.findAll().forEach(i -> ingredients.add(i));
 
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types) {
@@ -69,7 +77,7 @@ public class DesignTacoController {
      * хранит состояние собираемого заказа, пока клиент выбирает ингредиенты для тако несколькими запросами.
      * @return создают новый объект TacoOrder для размещения в модели.
      */
-    @ModelAttribute (name = "tacoOrder")
+    @ModelAttribute (name = "order")
     public TacoOrder order(){
         return new TacoOrder();
     }
@@ -85,14 +93,19 @@ public class DesignTacoController {
         return new Taco();
     }
 
+    @ModelAttribute(name = "user")
+    public User user(Principal principal){
+        String username = principal.getName();
+        User user = userRepo.findByUsername(username);
+        return user;
+    }
+
+
+
     @GetMapping
     public String showDesignForm(){
         return "design";
     } //имя представления, которое будет отправлено пользователю.
-
-    private Iterable<Ingredient> filterByType(Iterable<Ingredient> ingredients, Ingredient.Type type){
-        return StreamSupport.stream(ingredients.spliterator(),false).filter(x->x.getType().equals(type)).collect(Collectors.toList());
-    }
 
     /**
      * Аннотация @PostMapping, которую мы применили к методу pro-
@@ -100,14 +113,20 @@ public class DesignTacoController {
      * что processTaco() будет обрабатывать запросы POST с путем /design.
      * Это именно то, что нам нужно для обработки творений мастеров тако.
      * @param taco
-     * @param tacoOrder
+     * @param order
      * @return
      */
     @PostMapping
-    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder){
+    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder order){
+        log.info("   --- Saving taco");
         if (errors.hasErrors()) return "design";
-        tacoOrder.addTaco(taco);
+        Taco saved = tacoRepo.save(taco);
+        order.addTaco(saved);
         log.info("Processing taco: {} ",taco);
         return "redirect:/orders/current"; //имя представления, которое будет отправлено пользователю.
+    }
+
+    private Iterable<Ingredient> filterByType(Iterable<Ingredient> ingredients, Ingredient.Type type){
+        return StreamSupport.stream(ingredients.spliterator(),false).filter(x->x.getType().equals(type)).collect(Collectors.toList());
     }
 }

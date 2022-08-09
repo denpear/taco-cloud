@@ -3,13 +3,7 @@ package tacos;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -31,8 +25,11 @@ public class TacoOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Date placedAt = new Date();
 
+    private Date placedAt;
+
+    @ManyToOne
+    private User user;
 
     @NotBlank (message = "Delivery name is required")
     private String deliveryName;
@@ -59,16 +56,20 @@ public class TacoOrder implements Serializable {
     private String ccCVV;
 
     /**
-     * связь со списком объ-
-     * ектов Taco аннотирована с помощью
+     * связь со списком объектов Taco аннотирована с помощью
      * @OneToMany, то есть все тако
      * в этом списке относятся к этому одному заказу.
      */
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Taco.class, cascade = CascadeType.PERSIST)
     private List<Taco> tacos = new ArrayList<>();
 
-    public void addTaco(Taco taco){
-        this.tacos.add(taco);
+    public void addTaco(Taco design){
+        this.tacos.add(design);
+    }
+
+    @PrePersist
+    void placedAt(){
+        this.placedAt = new Date();
     }
 
 }

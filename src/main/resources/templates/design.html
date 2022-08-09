@@ -12,8 +12,12 @@
 <h1>Design your taco!</h1>
 <img th:src="@{/images/TacoCloud.png}"/>
 
+<form method="POST" th:action="@{/logout}" id="logoutForm">
+    <input type="submit" value="Logout"/>
+</form>
 <!-- tag::formTag[] -->
 <form method="POST" th:object="${taco}">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <!-- end::all[] -->
 
     <span class="validationError"
