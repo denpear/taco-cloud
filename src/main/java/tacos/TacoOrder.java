@@ -1,75 +1,76 @@
 package tacos;
-
-import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
-
-import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Класс, представляющий заказ:
- * TacoOrder, представляющий заказы, которые клиенты будут оставлять на сайте,
- * с информацией о рецепте, оплате и доставке
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.CreditCardNumber;
+
+import lombok.Data;
+
 @Data
 @Entity
+@Table(name="Taco_Order")
 public class TacoOrder implements Serializable {
 
-    private static final long serialVersionID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  private static final long serialVersionUID = 1L;
 
-    private Date placedAt;
+  @Id
+  @GeneratedValue(strategy=GenerationType.AUTO)
+  private Long id;
 
-    @ManyToOne
-    private User user;
+  private Date placedAt;
 
-    @NotBlank (message = "Delivery name is required")
-    private String deliveryName;
+  @ManyToOne
+  private User user;
 
-    @NotBlank (message = "Street is required")
-    private String deliveryStreet;
+  @NotBlank(message="Delivery name is required")
+  private String deliveryName;
 
-    @NotBlank (message = "City is required")
-    private String deliveryCity;
+  @NotBlank(message="Street is required")
+  private String deliveryStreet;
 
-    @NotBlank (message = "State is required")
-    private String deliveryState;
+  @NotBlank(message="City is required")
+  private String deliveryCity;
 
-    @NotBlank (message = "Zip is required")
-    private String deliveryZip;
+  @NotBlank(message="State is required")
+  private String deliveryState;
 
-    @CreditCardNumber(message = "Not a valid credit card number") // https://www.creditcardvalidator.org/articles/luhn-algorithm
-    private String ccNumber;
+  @NotBlank(message="Zip code is required")
+  private String deliveryZip;
 
-    @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$", message = "Must be formatted MM/YY")
-    private String ccExpiration;
+  @CreditCardNumber(message="Not a valid credit card number")
+  private String ccNumber;
 
-    @Digits(integer = 3,fraction = 0, message = "Invalid CVV")
-    private String ccCVV;
+  @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",
+           message="Must be formatted MM/YY")
+  private String ccExpiration;
 
-    /**
-     * связь со списком объектов Taco аннотирована с помощью
-     * @OneToMany, то есть все тако
-     * в этом списке относятся к этому одному заказу.
-     */
-    @ManyToMany(targetEntity = Taco.class, cascade = CascadeType.PERSIST)
-    private List<Taco> tacos = new ArrayList<>();
+  @Digits(integer=3, fraction=0, message="Invalid CVV")
+  private String ccCVV;
 
-    public void addTaco(Taco design){
-        this.tacos.add(design);
-    }
+  @ManyToMany(targetEntity=Taco.class)
+  private List<Taco> tacos = new ArrayList<>();
 
-    @PrePersist
-    void placedAt(){
-        this.placedAt = new Date();
-    }
+  public void addTaco(Taco design) {
+    this.tacos.add(design);
+  }
+
+  @PrePersist
+  void placedAt() {
+    this.placedAt = new Date();
+  }
 
 }
